@@ -1,0 +1,84 @@
+#!/bin/sh
+# The Lazy Peregrin as your screensaver.
+#
+# Wayland desktops have no screensaver service to plug into. Instead an idle watcher
+# (swayidle) is started at login and runs the screensaver once the session has been
+# idle for a while; any key or mouse movement ends it. It works on compositors with
+# the ext-idle-notify protocol: KDE Plasma, Sway, Hyprland, niri, COSMIC, labwc,
+# river and others. GNOME does not provide it.
+#
+# Installing the package is enough: the watcher starts at your next login, with a
+# delay of five minutes. This command changes the delay or turns it off, per user.
+
+set -e
+CONF="${XDG_CONFIG_HOME:-$HOME/.config}/lazy-peregrin/idle-minutes"
+PATTERN='^swayidle .*lazy-peregrin-screensaver start'
+
+usage() {
+    echo "usage: lazy-peregrin-screensaver enable [MINUTES]   start after MINUTES idle (default 5)"
+    echo "       lazy-peregrin-screensaver disable"
+    echo "       lazy-peregrin-screensaver status"
+    echo "       lazy-peregrin-screensaver now                run it right away"
+    exit 1
+}
+
+minutes() { if [ -r "$CONF" ]; then cat "$CONF"; else echo 5; fi; }
+stop_watcher() { pkill -u "$(id -u)" -f "$PATTERN" 2>/dev/null || true; }
+running() { pgrep -u "$(id -u)" -f "$PATTERN" >/dev/null 2>&1; }
+
+case "${1:-}" in
+watch)
+    # run at login, and by "enable"
+    m="$(minutes)"
+    case "$m" in ''|*[!0-9]*) exit 0 ;; esac      # "off"
+    [ -n "${WAYLAND_DISPLAY:-}" ] || exit 0
+    command -v swayidle >/dev/null 2>&1 || exit 0
+    stop_watcher
+    exec swayidle -w timeout $((m * 60)) 'lazy-peregrin-screensaver start'
+    ;;
+start)
+    # what the watcher runs: not on top of another screensaver, and not twice
+    sleep 1
+    pgrep -u "$(id -u)" -x teglon >/dev/null 2>&1 && exit 0
+    pgrep -u "$(id -u)" -x lazy-peregrin >/dev/null 2>&1 && exit 0
+    exec lazy-peregrin
+    ;;
+enable)
+    m="${2:-5}"
+    case "$m" in ''|*[!0-9]*) usage ;; esac
+    [ "$m" -ge 1 ] || usage
+    if ! command -v swayidle >/dev/null 2>&1; then
+        echo "swayidle is not installed (dnf install swayidle / apt install swayidle)." >&2
+        exit 1
+    fi
+    if [ -z "${WAYLAND_DISPLAY:-}" ]; then
+        echo "This is not a Wayland session. On X11, add lazy-peregrin to xscreensaver or your desktop's own idle settings." >&2
+        exit 1
+    fi
+    mkdir -p "$(dirname "$CONF")"
+    echo "$m" > "$CONF"
+    stop_watcher
+    setsid "$0" watch >/dev/null 2>&1 &
+    echo "The Lazy Peregrin will start after $m minutes idle, now and at every login."
+    ;;
+disable)
+    mkdir -p "$(dirname "$CONF")"
+    echo off > "$CONF"
+    stop_watcher
+    echo "The Lazy Peregrin screensaver is off."
+    ;;
+status)
+    m="$(minutes)"
+    case "$m" in
+        ''|*[!0-9]*) echo "The Lazy Peregrin screensaver is off." ;;
+        *) echo "Starts after $m minutes idle."
+           if running; then echo "Idle watcher is running."; else echo "Idle watcher is not running (it starts at login, or run: lazy-peregrin-screensaver enable $m)."; fi ;;
+    esac
+    ;;
+now)
+    exec lazy-peregrin
+    ;;
+*)
+    usage
+    ;;
+esac

@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=The Lazy Peregrin
+Comment=Watch a fraa find the shortest way round the maths
+Exec=lazy-peregrin --window
+Icon=lazy-peregrin
+Categories=Game;LogicGame;Education;Math;
+Keywords=Anathem;travelling salesman;screensaver;

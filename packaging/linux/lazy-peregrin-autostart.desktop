@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=The Lazy Peregrin screensaver
+Comment=Start the Lazy Peregrin when the session has been idle
+Exec=lazy-peregrin-screensaver watch
+Icon=lazy-peregrin
+NoDisplay=true
+X-GNOME-Autostart-enabled=true

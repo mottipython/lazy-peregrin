@@ -1,0 +1,19 @@
+Package: lazy-peregrin
+Version: @VERSION@
+Section: games
+Priority: optional
+Architecture: @ARCH@
+Depends: libc6 (>= 2.35), libsdl2-2.0-0 (>= 2.0.18), swayidle
+Installed-Size: @SIZE@
+Maintainer: Motti Schleider <motti.schleider@gmail.com>
+Description: The Lazy Peregrin, a screensaver from "Anathem"
+ The Lazy Peregrin is the problem of a wandering fraa in Neal Stephenson's novel
+ Anathem who must call at a number of maths and wants to walk as little as he
+ can: the travelling salesman problem.
+ .
+ This screensaver draws an island of maths, shows a syntactic device trying the
+ routes one by one and Saunt Grod's Machine holding them all at once, and then
+ sends a small fraa toddling round the shortest way.
+ .
+ On Wayland desktops it starts by itself after five minutes idle.
+ lazy-peregrin-screensaver changes the delay or turns it off.

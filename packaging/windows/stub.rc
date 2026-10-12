@@ -1,0 +1,6 @@
+/* string 1 is the name Windows shows in its list of screensavers */
+1 ICON "packaging/windows/lazy-peregrin.ico"
+STRINGTABLE
+BEGIN
+    1 "The Lazy Peregrin"
+END
