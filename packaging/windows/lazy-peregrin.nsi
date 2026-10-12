@@ -6,7 +6,7 @@
 !include "x64.nsh"
 
 !ifndef VERSION
-  !define VERSION "1.0.0"
+  !define VERSION "1.0.1"
 !endif
 
 Name "The Lazy Peregrin ${VERSION}"

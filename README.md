@@ -42,23 +42,22 @@ Packages are on the [releases page](../../releases).
 
 ### Windows
 
-Run `LazyPeregrin-Setup-1.0.0.exe`. It asks for administrator rights, because
+Run `LazyPeregrin-Setup-1.0.1.exe`. It asks for administrator rights, because
 Windows only lists screensavers that are in its own system folder. After that
 "The Lazy Peregrin" is in Screen Saver Settings with the others, already selected.
 Uninstall from Apps.
 
-The Windows build is cross-compiled and has not been tested on a real Windows
-machine yet.
+The Windows build is cross-compiled and has been tested on Windows 11.
 
 ### Linux
 
 **Fedora, Nobara** (built on Fedora 44):
 
-    sudo dnf install ./lazy-peregrin-1.0.0-1.fc44.x86_64.rpm
+    sudo dnf install ./lazy-peregrin-1.0.1-1.fc44.x86_64.rpm
 
 **Debian, Ubuntu, Mint** (Ubuntu 22.04 / Debian 12 or later):
 
-    sudo apt install ./lazy-peregrin_1.0.0_amd64.deb
+    sudo apt install ./lazy-peregrin_1.0.1_amd64.deb
 
 That is all: from your next login it starts by itself after five minutes idle, and
 any key or mouse movement ends it. To start the watcher without logging out, or to
