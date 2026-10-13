@@ -49,14 +49,20 @@
 #pragma GCC diagnostic pop
 #endif
 
-#ifdef _WIN32
+#if defined(__APPLE__)
+/* Mach-O: its own section names, and C names carry a leading underscore */
+#define ART_SECTION ".section __DATA,__const\n"
+#define ART_SYM "_art_"
+#elif defined(_WIN32)
 #define ART_SECTION ".section .rdata,\"dr\"\n"
+#define ART_SYM "art_"
 #else
 #define ART_SECTION ".section .rodata\n"
+#define ART_SYM "art_"
 #endif
 #define ART(name, file) \
-    __asm__(ART_SECTION ".global art_" #name "\nart_" #name ":\n.incbin \"assets/art/" file "\"\n" \
-            ".global art_" #name "_end\nart_" #name "_end:\n.text\n"); \
+    __asm__(ART_SECTION ".globl " ART_SYM #name "\n" ART_SYM #name ":\n.incbin \"assets/art/" file "\"\n" \
+            ".globl " ART_SYM #name "_end\n" ART_SYM #name "_end:\n.text\n"); \
     extern const unsigned char art_##name[], art_##name##_end[];
 ART(walk1, "walk1.png") ART(walk2, "walk2.png") ART(sleep, "sleep.png") ART(wake, "wake.png")
 ART(math, "math.png") ART(home, "home.png") ART(flag, "flag.png") ART(tree1, "tree1.png") ART(tree2, "tree2.png")
