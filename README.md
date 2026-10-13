@@ -51,26 +51,25 @@ The Windows build is cross-compiled and has been tested on Windows 11.
 
 ### macOS
 
-There are two downloads on the releases page, for Apple Silicon and Intel, macOS 11
-or later.
+For Apple Silicon and Intel, macOS 11 or later. The quick way is to paste this into
+Terminal. It installs the screen saver for your user and opens the Screen Saver
+settings, where it is at the end of the list:
 
-**The screen saver** is the file ending `-mac-screensaver.zip`. Unzip it and
-double-click the `.saver` file; macOS offers to install it. Then choose it in System
-Settings, Screen Saver (scroll to the end of the list, under Other).
+    curl -fsSL https://raw.githubusercontent.com/mottipython/anathem-screensavers/main/tools/mac-install.sh | sh -s -- lazy-peregrin
 
-**The app** is the file ending `-mac.zip`: the same thing as an ordinary program
-that runs full screen until you press a key.
+Leave off `-s -- lazy-peregrin` to install all the
+[Anathem screensavers](https://github.com/mottipython/anathem-screensavers) at once,
+or put `--uninstall` in its place to take them off again.
 
-Neither is signed with an Apple developer certificate, so macOS will refuse them at
-first. After the refusal, open System Settings, Privacy & Security, scroll down,
-and click Open Anyway. If the screen saver still will not load, clear the
-quarantine mark in Terminal:
+To do it by hand, download the file ending `-mac-screensaver.zip` from the releases
+page, unzip it and double-click the `.saver` file. It is not signed with an Apple
+developer certificate, so macOS will refuse it at first: open System Settings,
+Privacy & Security, and click Open Anyway. (The command above avoids that step.)
+The file ending `-mac.zip` is the same thing as an ordinary app that runs full
+screen until you press a key.
 
-    xattr -dr com.apple.quarantine ~/Library/"Screen Savers"
-
-Both are built on a Mac build machine, where the screen saver is loaded and made to
-draw as a test. They have not yet been tried by a person on a real Mac, and screen
-savers on recent macOS are known to be temperamental; reports are welcome.
+Tried on macOS 15 on Intel, where it installs, previews and runs. Not yet tried on
+Apple Silicon; reports are welcome.
 
 ### Linux
 
