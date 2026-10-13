@@ -1,7 +1,7 @@
 # The Lazy Peregrin
 
 A screensaver for the Lazy Peregrin problem from Neal Stephenson's novel *Anathem*.
-Linux and Windows.
+Linux, Windows and macOS. One of the [Anathem screensavers](https://github.com/mottipython/anathem-screensavers).
 
 ![The fraa on his way round the maths](docs/screenshots/5-on-the-road.png)
 
