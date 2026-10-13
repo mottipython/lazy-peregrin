@@ -51,16 +51,26 @@ The Windows build is cross-compiled and has been tested on Windows 11.
 
 ### macOS
 
-Download `The-Lazy-Peregrin-…-mac.zip` from the releases page, unzip it, and open the app. It
-runs full screen; any key or a click ends it. It is built for Apple Silicon and
-Intel, macOS 11 or later.
+There are two downloads on the releases page, for Apple Silicon and Intel, macOS 11
+or later.
 
-The app is not signed with an Apple developer certificate, so the first time macOS
-will refuse to open it. Right-click the app and choose Open, or allow it under
-System Settings, Privacy & Security. For now it is an ordinary app and not a screen
-saver module, so it does not appear in the Screen Saver settings. The Mac build is
-made and run on a build machine but has not been tried by a person on a real Mac;
-reports are welcome.
+**The screen saver** is the file ending `-mac-screensaver.zip`. Unzip it and
+double-click the `.saver` file; macOS offers to install it. Then choose it in System
+Settings, Screen Saver (scroll to the end of the list, under Other).
+
+**The app** is the file ending `-mac.zip`: the same thing as an ordinary program
+that runs full screen until you press a key.
+
+Neither is signed with an Apple developer certificate, so macOS will refuse them at
+first. After the refusal, open System Settings, Privacy & Security, scroll down,
+and click Open Anyway. If the screen saver still will not load, clear the
+quarantine mark in Terminal:
+
+    xattr -dr com.apple.quarantine ~/Library/"Screen Savers"
+
+Both are built on a Mac build machine, where the screen saver is loaded and made to
+draw as a test. They have not yet been tried by a person on a real Mac, and screen
+savers on recent macOS are known to be temperamental; reports are welcome.
 
 ### Linux
 
