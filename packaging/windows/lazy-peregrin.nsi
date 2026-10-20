@@ -41,7 +41,8 @@ Function .onInit
 FunctionEnd
 
 Function OpenSettings
-  Exec 'rundll32.exe shell32.dll,Control_RunDLL desk.cpl,,1'
+  ; 64-bit rundll32: a 32-bit one looks for screen savers in SysWOW64 and shows (None)
+  Exec '"$WINDIR\Sysnative\rundll32.exe" shell32.dll,Control_RunDLL desk.cpl,,1'
 FunctionEnd
 
 Section "The Lazy Peregrin" SecMain
