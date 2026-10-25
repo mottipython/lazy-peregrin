@@ -835,14 +835,19 @@ static int snapshot(void)
 
 static void usage(void)
 {
-    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "The Lazy Peregrin",
+    static const char text[] =
         "The Lazy Peregrin screensaver\n\n"
         "  --window        run in a window (Esc or Q quits)\n"
         "  --maths N       number of maths, 6 to 18 (default: 10 to 15 at random)\n"
         "  --speed X       animation speed, 1 = normal\n"
         "  --seed N        repeatable sequence\n"
         "  --snapshot FILE.bmp [--time SECONDS] [--size WxH]\n"
-        "                  write a picture of the screensaver after SECONDS and exit\n", NULL);
+        "                  write a picture of the screensaver after SECONDS and exit\n";
+    if (getenv("SDL_VIDEODRIVER") && !strcmp(getenv("SDL_VIDEODRIVER"), "dummy")) {
+        fputs(text, stderr);
+        return;
+    }
+    SDL_ShowSimpleMessageBox(SDL_MESSAGEBOX_INFORMATION, "The Lazy Peregrin", text, NULL);
 }
 
 int main(int argc, char **argv)
@@ -860,11 +865,15 @@ int main(int argc, char **argv)
         else if (!strcmp(a, "--speed") && i + 1 < argc) opt_speed = SDL_atof(argv[++i]);
         else if (!strcmp(a, "--seed") && i + 1 < argc) opt_seed = SDL_strtoull(argv[++i], NULL, 10);
         else if (!strcmp(a, "--snapshot") && i + 1 < argc) opt_snapshot = argv[++i];
-        else if (!strcmp(a, "--time") && i + 1 < argc) opt_time = SDL_atof(argv[++i]);
+        else if (!strcmp(a, "--time") && i + 1 < argc) {
+            opt_time = SDL_atof(argv[++i]);
+            if (opt_time < 0.0) opt_time = 0.0;
+            if (opt_time > 86400.0) opt_time = 86400.0;
+        }
         else if (!strcmp(a, "--size") && i + 1 < argc) {
             const char *x = SDL_strchr(argv[++i], 'x');
             opt_w = SDL_atoi(argv[i]); opt_h = x ? SDL_atoi(x + 1) : 0;
-            if (opt_w < 64 || opt_h < 64) { usage(); return 1; }
+            if (opt_w < 64 || opt_h < 64 || opt_w > 8192 || opt_h > 8192) { usage(); return 1; }
         }
         else { usage(); return 1; }
     }

@@ -80,3 +80,27 @@ clean:
 	rm -rf build dist
 
 .PHONY: all check install uninstall deb rpm windows installer dist clean
+
+# Fuzz targets (AddressSanitizer + UndefinedBehaviorSanitizer + libFuzzer)
+FUZZ_CC ?= clang
+FUZZ_CFLAGS ?= -O1 -g -fsanitize=fuzzer,address,undefined -Isrc -Wall
+FUZZ_STANDALONE_CFLAGS ?= -O1 -g -fsanitize=address,undefined -Isrc -Wall
+
+fuzz: build/fuzz/fuzz_cli build/fuzz/fuzz_stb_image
+
+build/fuzz/fuzz_cli: test/fuzz/fuzz_cli.c
+	@mkdir -p build/fuzz
+	$(FUZZ_CC) $(FUZZ_CFLAGS) -DLIBFUZZER -o $@ $< -lm
+
+build/fuzz/fuzz_stb_image: test/fuzz/fuzz_stb_image.c
+	@mkdir -p build/fuzz
+	$(FUZZ_CC) $(FUZZ_CFLAGS) -DLIBFUZZER -o $@ $< -lm
+
+fuzz-check: fuzz
+	build/fuzz/fuzz_cli test/fuzz_corpus/cli -max_total_time=3 -runs=1000
+	build/fuzz/fuzz_stb_image test/fuzz_corpus/stb_image -max_total_time=3 -runs=1000
+
+fuzz-container:
+	docker run --rm -v $(CURDIR):/workspace -w /workspace screensaver-sdl:latest make fuzz-check
+
+.PHONY: fuzz fuzz-check fuzz-container
